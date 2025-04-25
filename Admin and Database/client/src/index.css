@@ -1,0 +1,19 @@
+body {
+  font-family: 'Inter', Arial, sans-serif; /* Modern font */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  background-color: #e9ecef; /* Light gray background */
+  color: #212529; /* Darker text for better contrast */
+  line-height: 1.6; /* Improved readability */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  background-color: #f8f9fa; /* Subtle background for code blocks */
+  padding: 0.2rem 0.4rem; /* Add padding for better visibility */
+  border-radius: 4px; /* Rounded corners */
+  color: #d63384; /* Highlighted text color */
+}
