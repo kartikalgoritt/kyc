@@ -1,6 +1,8 @@
 from urllib.parse import quote_plus
 GEMINI_API_KEY = "AIzaSyCkUIoAexHRCHWez6zxA4faUyj48g9n28A"
 GEMINI_MODEL_NAME = "gemini-2.0-flash"
+OS_API_KEY = "69c6b83cf67ef4e3d3965477ca3b470f"
+
 
 username = "kartik61003"
 password = quote_plus("algoritt@123")
@@ -63,5 +65,6 @@ Your task is to output a **single JSON object only** (no explanation) with:
 Only return the valid JSON object, nothing else.
 """
 
-
 CONFIDENT_AI = "wHbl4e+45rjS7QdUSiSnWmVYrSz6Pqo317TlhACTExU="
+
+Sanction_PROMT = '''Based on the provided sanction List return a python list  which contains all the countries by which the entity has been sanctioned, do not reuten anything else, only countiries The list should be in the following format: ["India", "Pakistan", "Russia"] ensure that list is unique and sorted in alphabetical order.'''

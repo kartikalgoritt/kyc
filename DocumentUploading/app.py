@@ -7,7 +7,11 @@ from utils.compare_details import compare_details_utils
 from PIL import Image
 import io
 from pymongo import MongoClient
+from RiskScoringEngineUtils.SanctionScreening import sanctionCheck
+from RiskScoringEngineUtils.PEPScreening import pepCheck
+from RiskScoringEngineUtils.sanctionLLM import sanctionedCountryList
 from config import password, username
+
 
 
 st.set_page_config(layout="wide")
@@ -97,7 +101,7 @@ if submitted:
             ocr_result_adhar = ocr_result["adhar_details"]
             ocr_result_dl = ocr_result["dl_details"]
             match_results = compare_details_utils(ocr_result_adhar, ocr_result_dl)
-
+            
             data ={
                 "adhar_details": ocr_result_adhar,
                 "dl_details": ocr_result_dl,
@@ -105,6 +109,33 @@ if submitted:
                 "customer_valid": match_results["customer_valid"],
                 "kyc_status": "not_verified"    
             }
+        
+            with st.spinner("🔍 Processing document with Risk Scoring Engine..."):
+                sanction_results = sanctionCheck("Vladimir Putin", "1952-10-07")
+                pep_results = pepCheck("Vladimir Putin", "1952-10-07")
+                
+                if sanction_results or pep_results:
+                    if sanction_results:
+                        sanction_countries = sanctionedCountryList(sanction_results[0]["datasets"])
+                        st.warning("⚠️ Sanction check results found.")
+                        st.write("Sanctioned Countries:")
+                        for country in sanction_countries:
+                            st.write(f"- {country}")
+                        st.write("Sanction Results:")
+                        for result in sanction_results:
+                            st.json(result, expanded=False)
+                    else :                                                      
+                        st.success("✅ No sanction results found.")
+                    if pep_results: 
+                        if(pep_results[0]["match"] == True):
+                            st.warning("⚠️ PEP check results found.")
+                            for result in pep_results:
+                                st.json(result, expanded=False)
+                    else:
+                        st.success("✅ No PEP results found.")
+                else:
+                    st.success("✅ No sanction or PEP results found.")
+                    
 
             db = client["identity_documents"]
             collection = db["documents"]
@@ -116,10 +147,6 @@ if submitted:
             else:
                 collection.insert_one(data)
                 st.success("✅ Document processed successfully!")
-
-
-
-           
 
 
         if ocr_result_adhar and ocr_result_dl and match_results:
